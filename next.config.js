@@ -3,7 +3,8 @@
  */
 const nextConfig = {
   reactStrictMode: true,
-
+  experimental: {},
+  output: "standalone",
   images: {
     remotePatterns: [
       {

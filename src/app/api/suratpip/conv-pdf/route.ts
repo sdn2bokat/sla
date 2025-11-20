@@ -3,7 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
-export const runtime = "edge";
+// WAJIB: agar puppeteer bisa jalan di Vercel
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 type RekomRecord = {
   id?: number | string;
@@ -41,9 +43,9 @@ export async function POST(req: Request) {
 
     const rekom = rekomData as RekomRecord;
 
-    // -----------------------------
-    // AMBIL TEMPLATE
-    // -----------------------------
+    // ================================
+    // AMBIL TEMPLATE HTML
+    // ================================
     const { data: tmplFile, error: tmplErr } = await supabase.storage
       .from("surat-pip")
       .download("template/template.html");
@@ -54,13 +56,13 @@ export async function POST(req: Request) {
 
     const rawHtml = await tmplFile.text();
 
-    // -----------------------------
+    // ================================
     // GANTI PLACEHOLDER
-    // -----------------------------
+    // ================================
     let filledHtml = rawHtml;
+
     for (const key of Object.keys(rekom)) {
-      const value = rekom[key] ?? "";
-      filledHtml = filledHtml.replace(new RegExp(`{{${key}}}`, "g"), String(value));
+      filledHtml = filledHtml.replace(new RegExp(`{{${key}}}`, "g"), String(rekom[key] ?? ""));
     }
 
     const finalHtml = `<!doctype html>
@@ -75,13 +77,13 @@ export async function POST(req: Request) {
   <body>${filledHtml}</body>
 </html>`;
 
-    // -----------------------------
-    // PUPPETEER FIX (FINAL)
-    // -----------------------------
+    // ================================
+    // PUPPETEER FIX
+    // ================================
     let execPath = await chromium.executablePath();
 
-    if (!execPath || execPath.length === 0) {
-      execPath = "/usr/bin/chromium-browser"; // Fallback untuk Vercel production
+    if (!execPath) {
+      execPath = "/usr/bin/chromium-browser"; // fallback
     }
 
     const browser = await puppeteer.launch({
@@ -100,9 +102,9 @@ export async function POST(req: Request) {
 
     await browser.close();
 
-    // -----------------------------
-    // UPLOAD PDF KE SUPABASE
-    // -----------------------------
+    // ================================
+    // UPLOAD PDF
+    // ================================
     const filename = `pdf/${rekom.nisn || "unknown"}-${Date.now()}.pdf`;
 
     const { error: uploadErr } = await supabase.storage
@@ -129,9 +131,6 @@ export async function POST(req: Request) {
       path: filename,
     });
   } catch (err: any) {
-    return NextResponse.json(
-      { error: err?.message || "Kesalahan server" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err?.message || "Kesalahan server" }, { status: 500 });
   }
 }
