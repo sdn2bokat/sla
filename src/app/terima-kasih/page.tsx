@@ -36,7 +36,7 @@ export default function TerimaKasih(){
       </p>
       <BagikanSosmed/>
       <div className="mt-40 sm:mt-20">
-        <p className="font-poppins text-xs sm:text-sm text-center text-gray-700 font-tight">Hak Cipta © {new Date().getFullYear()} SD NEGERI 2 BOKAT/ SD PEMBINA KAB. BUOL
+        <p className="font-poppins text-xs sm:text-sm text-center text-gray-700 font-tight">Hak Cipta © {new Date().getFullYear()} — SD NEGERI 2 BOKAT/ SD PEMBINA KAB. BUOL
       </p>
       <div className="pt-2 bg-transparent flex items-center justify-center gap-1 sm:gap-2 opacity-90 select-none" onContextMenu={(e) => e.preventDefault()}>
           <img
