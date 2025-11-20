@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   🌍 Base Layer — Style Umum HTML
+================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-inter text-textNormal bg-bgLight antialiased;
+  }
+
+  :root {
+    --background-image-header: linear-gradient(120.3deg, #046ede 0%, #03d3fc 100%);
+  }
+
+  /* Heading pakai warna langsung, tidak panggil class */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins text-textTitle leading-normal;
+  }
+}
+
+/* ================================
+   🌈 Components Layer — Kustom Class
+================================ */
+@layer components {
+  /* Warna teks */
+  .text-texttitle {
+    @apply text-[color:theme('colors.textTitle')];
+  }
+
+  .text-primary {
+    @apply text-[color:theme('colors.primary')];
+  }
+
+  .text-secondary {
+    @apply text-[color:theme('colors.secondary')];
+  }
+
+  .text-accent {
+    @apply text-[color:theme('colors.accent')];
+  }
+
+  .text-hijau {
+    @apply text-[color:theme('colors.textHijau')];
+  }
+
+  /* Background */
+  .bg-primary {
+    @apply bg-[color:theme('colors.primary')];
+  }
+
+  .bg-secondary {
+    @apply bg-[color:theme('colors.secondary')];
+  }
+
+  .bg-accent {
+    @apply bg-[color:theme('colors.accent')];
+  }
+
+  .bg-light {
+    @apply bg-[color:theme('colors.bgLight')];
+  }
+
+  .bg-dark {
+    @apply bg-[color:theme('colors.bgDark')];
+  }
+
+  .bg-succ {
+    @apply bg-[color:theme('colors.bgSucc')];
+  }
+
+  .bg-err {
+    @apply bg-[color:theme('colors.bgErr')];
+  }
+
+  /* Tombol */
+  .btn {
+    @apply px-5 py-2 rounded-xl text-white font-medium bg-primary shadow-soft transition-all duration-300 ease-out-elastic;
+  }
+  .btn:hover {
+    @apply bg-primaryDark scale-105;
+  }
+  .btn:active {
+    @apply scale-95;
+  }
+}
+/* ======== A4 Layout for Preview Only (Screen Only) ======== */
+.a4-preview {
+  width: auto;     
+  min-height: auto; 
+  padding: 10mm;
+  background: white;
+  margin: 0 auto;
+  transform-origin: top center;
+}
+
+/* Supaya tidak terlalu besar di layar kecil → autoscale */
+@media (max-width: 350px) {
+  .a4-preview {
+    transform: scale(0.45);
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* HP kecil (350–420px) */
+@media (max-width: 420px) {
+  .a4-preview {
+    transform: scale(0.55);
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* HP normal (420–500px) */
+@media (max-width: 500px) {
+  .a4-preview {
+    transform: scale(0.75);
+    padding: 0;
+    margin: 0;
+  }
+}
+

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Surat Rekomendasi PIP</title>
+<style>
+@page {
+  size: A4 portrait;
+  margin-top: 1.2cm;
+  margin-bottom: 1.2cm;
+  margin-left: 2.3cm;
+  margin-right: 2cm;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  color: #000;
+}
+
+.kop {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.header-space {
+  height: 80px;
+}
+
+.right { text-align: right;
+		line-height: 0.1;
+        }
+
+.top { color: white;
+		line-height: 1.5;
+        }
+.left { text-align: left;
+line-height: 1.3; }
+.justify { text-align: justify;
+line-height: 1.3; }
+.indent { text-indent: 40px; line-height: 1.3; }
+
+/* Table-style align untuk nomor */
+.info-table {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.info-table td {
+  padding: 1px 0;
+  vertical-align: top;
+}
+.info-table td.label {
+  width: 50px;
+}
+.info-table td.colon {
+  width: 10px;
+}
+
+/* Table-style align untuk biodata */
+.bio-table {
+  margin-top: 5px;
+  margin-bottom: 8px;
+}
+.bio-table td {
+  padding: 1px 0;
+  vertical-align: top;
+}
+.bio-table td.label {
+  width: 150px;
+}
+.bio-table td.colon {
+  width: 10px;
+}
+
+.signature {
+  margin-top: 35px;
+  position: relative;
+  width: 100%;
+  text-align: left;
+}
+.signature-box {
+  margin-left: 53%;
+}
+.signature-box p {
+  margin: 2px 0;
+  line-height: none;
+}
+.signature img {
+  position: absolute;
+  left: 36%;
+  top: 36px;
+  width: 2.6cm;
+  height: 2.6cm;
+}
+
+.text-job-sign {
+    line-height: 2.2;
+  }
+
+.text-blue-sign {
+    color: #2faae1;
+    font-weight: bold;
+    font-size: 10.8pt;
+    line-height: 1.5;
+  }
+  
+
+.signature-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+.signature-rank {
+  font-style: italic;
+  font-size: 10.5pt;
+  line-height: 0.5;
+}
+
+/* Footer */
+.footer-img {
+  position: absolute;
+  width: 100%;
+  bottom: 1.1px;
+}
+</style>
+</head>
+<body>
+
+<!-- Kop Sekolah -->
+<img src="https://luxhgiomdfqsbvjwpxku.supabase.co/storage/v1/object/public/kop/sdn2bokat-kop.png" class="kop">
+
+<p class="right">{{keldes}}, {{tgl_surat}}</p>
+
+<table class="info-table">
+<tr><td class="label">Nomor</td><td class="colon">:</td><td>{{no_surat}}</td></tr>
+<tr><td class="label">Sifat</td><td class="colon">:</td><td>Segera</td></tr>
+<tr><td class="label">Perihal</td><td class="colon">:</td>
+<td>
+Rekomendasi Permohonan Pencairan Dana<br>
+<u>Bansos PIP SD Tahap {{tahap}} Tahun Anggaran {{ta}}</u>
+</td></tr>
+</table>
+<p class="top">.</p>
+<p class="left">
+Yth, <b>Pimpinan Bank BRI Unit Sentral Buol</b><br>
+di – <br/><b style="margin-left: 40px";><u>Buol</u></b>
+</p>
+<p class="top">.</p>
+<p class="justify indent">
+Berdasarkan Surat Keputusan Kuasa Pengguna Anggaran Pusat Layanan Pembiayaan Pendidikan nomor: {{no_sk}} tanggal {{tgl_sk}} tentang Pemberian Dana Bantuan Sosial Program Indonesia Pintar (PIP) Sekolah Dasar Tahap {{tahap}} Tahun Anggaran {{ta}}. Saya yang bertanda tangan dibawah ini, Kepala SD Negeri 2 Bokat/ SD Pembina Kab. Buol dengan ini memberikan rekomendasi pencairan Dana Bansos PIP kepada:
+</p>
+
+<table class="bio-table">
+<tr><td class="label">Nama</td><td class="colon">:</td><td>{{nama}}</td></tr>
+<tr><td class="label">NISN</td><td class="colon">:</td><td>{{nisn}}</td></tr>
+<tr><td class="label">NIK</td><td class="colon">:</td><td>{{nik}}</td></tr>
+<tr><td class="label">Tempat, Tanggal Lahir</td><td class="colon">:</td><td>{{tempat_lhr}}, {{tgl_lhr}}</td></tr>
+<tr><td class="label">Peserta Didik Aktif di</td><td class="colon">:</td><td>{{kelas}}, Semester {{smst}}</td></tr>
+<tr><td class="label">Nama Orang Tua</td><td class="colon">:</td><td>
+a. Ibu &nbsp;&nbsp; : {{ibu}}<br>
+b. Ayah : {{ayah}}
+</td></tr>
+<tr><td class="label">Alamat</td><td class="colon">:</td><td>Desa {{keldes}}, Kec. {{kec}}, {{kabkot}}, Prov. {{prov}}</td></tr>
+</table>
+
+<p class="justify indent">
+Sehubungan dengan maksud diatas, maka memohon kepada pimpinan Bank penyalur kiranya berkenan dapat mencairkan Dana Bansos PIP yang bersangkutan melalui rekening:
+</p>
+
+<table class="bio-table">
+<tr><td class="label">Nomor</td><td class="colon">:</td><td>{{rekening}}</td></tr>
+<tr><td class="label">Nominal</td><td class="colon">:</td><td>Rp {{nominal}} <i>({{terbilang}})</i></td></tr>
+<tr><td class="label">Virtual Acc</td><td class="colon">:</td><td>{{acc}}</td></tr>
+</table>
+
+<p class="justify indent">
+Demikian rekomendasi ini, atas bantuan dan kerja sama yang baik diucapkan terima kasih.
+</p>
+
+<!-- Signature -->
+<div class="signature">
+<img src="{{url_tte}}" alt="Area TTE">
+<div class="signature-box">
+<p class="text-job-sign">Kepala Sekolah,</p>
+<p>SD Negeri 2 Bokat/ SD Pembina Kab. Buol</p>
+<p class="text-blue-sign">Ditandatangani secara elektronik</p>
+<p class="signature-name">RAHMAN A. MAJID, S.Pd</p>
+<p class="signature-rank">Pembina Tingkat 1. IV.b</p>
+<p>NIP. 19700402 200012 1 002</p>
+</div>
+</div>
+</body>
+</html>
