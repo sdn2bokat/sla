@@ -30,8 +30,12 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-, "src/app/rekom-pip/index.js", "src/app/pip/components/StepbyStep.jsx", "src/app/sodd/components/page.jsx", "src/app/pip/components/PdfThumbnail.js"  ],
+    ".next/dev/types/**/*.ts",
+    "src/app/rekom-pip/index.js",
+    "src/app/pip/components/StepbyStep.jsx",
+    "src/app/sodd/components/page.jsx",
+    "src/app/pip/components/PdfThumbnail.js"
+  ],
   "exclude": [
     "node_modules"
   ]

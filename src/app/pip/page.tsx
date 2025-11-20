@@ -98,7 +98,7 @@ export default function Pip() {
     <span className="text-[17px] sm:text-[22px] font-medium text-black leading-tight italic">
       Permohonan Rekomendasi PIP
       <p className="bg-header-gradient border-blue-500 rounded-tl-xl rounded-br-xl px-2 py-[1.5px] text-center text-bgDark 
-      text-[10px] md:text-[16px] font-semibold italic text-shadow">Sistem Layanan Pembuatan Surat Rekomendasi PIP</p>
+      text-[10px] md:text-[16px] font-semibold italic text-shadow">Sistem Layanan Administrasi Sekolah</p>
     </span>
   </div>
   <div className="flex flex-col items-center">

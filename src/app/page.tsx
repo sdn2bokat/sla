@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"siswa" | "sekolah">("siswa");
   const linkSiswa = [
-    { name: "Surat Rekomendasi Pencairan PIP", url: "/pip" },
+    { name: "Surat Rekomendasi PIP", url: "/pip" },
     { name: "Surat Keterangan Aktif Belajar", url: "#" },
     { name: "Surat Keterangan Lolos Butuh", url: "#" },
     { name: "Surat Keterangan Pindah/Keluar", url: "#" },
