@@ -48,7 +48,7 @@ export default function CekSuratPage() {
           className="mx-auto w-20 h-20"
         />
         <h1 className="text-xl font-bold mt-2 text-[#0A3A67]">
-          SD Negeri 2 Bokat
+          SD NEGERI 2 BOKAT/ SD PEMBINA KAB. BUOL
         </h1>
         <p className="text-sm text-gray-600 -mt-1">
           Kabupaten Buol — Sulawesi Tengah
