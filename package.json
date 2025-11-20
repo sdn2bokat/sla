@@ -1,6 +1,6 @@
 {
   "name": "silalah-proyek",
-  "version": "1.2.2",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -20,7 +20,7 @@
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.4",
-    "next": "14.2.15",
+    "next": "^16.0.1",
     "pdfjs-dist": "^5.4.394",
     "postcss": "^8.4.31",
     "qrcode": "^1.5.4",
