@@ -76,7 +76,6 @@ export default function PenerbitanSurat() {
 
         const rekom = rekomList?.[0];
 
-
         if (e1) throw e1;
         if (!rekom?.id) {
           console.warn("⚠️ Tidak ditemukan rekom_pip untuk siswa:", siswa.nisn);
@@ -126,32 +125,154 @@ export default function PenerbitanSurat() {
     fetchData();
   }, [siswa]);
 
-  // 🔹 Fungsi memanggil API conv-pdf dan redirect ke UnduhSurat
-  const handleTerbitkan = async () => {
-  if (!surat?.id) {
-    alert("ID surat tidak valid");
-    return;
+  // Helper: ambil template.html dari storage
+  async function fetchTemplate(): Promise<string> {
+    // download returns data as Blob in browser
+    const { data, error } = await supabase.storage
+      .from("surat-pip")
+      .download("template/template.html");
+
+    if (error || !data) {
+      throw new Error(
+        error?.message || "Gagal mengambil template dari storage"
+      );
+    }
+
+    const text = await data.text();
+    return text;
   }
 
-  setProcessing(true);
-  setProgress(10);
-    try {
-      const res = await fetch("/api/suratpip", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rekomId: surat.id }),
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "Gagal membuat PDF");
+  // Helper: ambil baris rekom_pip berdasarkan id
+  async function fetchRekomById(id: number) {
+    const { data, error } = await supabase
+      .from("rekom_pip")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
 
-      console.log("✅ Surat berhasil diterbitkan:", result);
-      sessionStorage.setItem("url_pdf", result.url_pdf);
+    if (error) throw error;
+    return data;
+  }
+
+  // Helper: replace placeholders {{key}} dalam template dengan nilai dari row
+  function replacePlaceholders(template: string, row: Record<string, any>) {
+    let html = template;
+    if (!row) return html;
+
+    // iterate keys and replace occurrences of {{key}} (case-sensitive)
+    Object.keys(row).forEach((key) => {
+      const rawVal = row[key];
+      const val =
+        rawVal === null || rawVal === undefined ? "" : String(rawVal);
+      // global replace for {{key}}
+      const pattern = new RegExp(`{{\\s*${escapeRegExp(key)}\\s*}}`, "g");
+      html = html.replace(pattern, val);
+    });
+
+    return html;
+  }
+
+  // escapeRegExp for safe regex construction
+  function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  // 🔹 Fungsi memanggil API conv-pdf dan redirect ke UnduhSurat
+  const handleTerbitkan = async () => {
+    if (!surat?.id) {
+      alert("ID surat tidak valid");
+      return;
+    }
+
+    setProcessing(true);
+    setProgress(10);
+
+    try {
+      // 1. Ambil template dari storage
+      setProgress(15);
+      const templateHtml = await fetchTemplate();
+      setProgress(25);
+
+      // 2. Ambil data rekom_pip untuk replace placeholder
+      const rekom = await fetchRekomById(surat.id);
+      if (!rekom) {
+        throw new Error("Data rekom_pip tidak ditemukan untuk replace template.");
+      }
+      setProgress(40);
+
+      // 3. Replace placeholder
+      const finalHtml = replacePlaceholders(templateHtml, rekom);
+      setProgress(55);
+
+      // 4. Kirim HTML ke API PDF Anda (app/api/pdf/route.ts) — menggunakan GET ?html=
+      //    (Anda punya API ini; saya tetap pakai GET agar sinkron dengan file Anda)
+      const encoded = encodeURIComponent(finalHtml);
+      setProgress(60);
+
+      const pdfRes = await fetch(`/api/pdf?html=${encoded}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/pdf",
+        },
+      });
+
+      if (!pdfRes.ok) {
+        const txt = await pdfRes.text().catch(() => null);
+        throw new Error(
+          `Gagal generate PDF: ${pdfRes.status} ${pdfRes.statusText} ${txt ?? ""}`
+        );
+      }
+
+      setProgress(70);
+
+      const pdfBlob = await pdfRes.blob();
+      const filename = `rekom_${surat.id}_${Date.now()}.pdf`;
+
+      // ------------------------
+      // NEW FLOW: kirim PDF ke server /api/pdf-pip (service role)
+      // ------------------------
+      setProgress(75);
+
+      const fd = new FormData();
+      // append Blob (pdfBlob) directly; provide filename so server uses it
+      fd.append("file", pdfBlob, filename);
+      fd.append("rekomId", String(surat.id));
+
+      const uploadRes = await fetch("/api/pdf-pip", {
+        method: "POST",
+        body: fd,
+      });
+
+      if (!uploadRes.ok) {
+        // attempt to parse JSON error body
+        const errBody = await uploadRes.json().catch(() => null);
+        throw new Error(
+          `Gagal upload PDF ke server: ${uploadRes.status} ${uploadRes.statusText} ${errBody?.error ?? ""}`
+        );
+      }
+
+      const uploadJson = await uploadRes.json();
+      const publicUrl = uploadJson?.publicUrl;
+
+      if (!publicUrl) {
+        throw new Error("Server tidak mengembalikan publicUrl setelah upload.");
+      }
+
+      setProgress(95);
+
+      // 8. Simpan ke sessionStorage & redirect ke halaman unduh (sama flow semula)
+      sessionStorage.setItem("url_pdf", publicUrl);
       sessionStorage.setItem("nisn", siswa.nisn);
+
       setProgress(100);
       router.push("/pip/rekomendasi/unduh");
-    } catch (err) {
-      console.error("❌ Terjadi kesalahan:", err);
-      alert("Gagal menerbitkan surat. Silakan coba lagi.");
+    } catch (err: any) {
+      console.error("❌ Terjadi kesalahan saat proses terbitkan:", err);
+      alert(
+        err?.message
+          ? `Gagal menerbitkan surat: ${err.message}`
+          : "Gagal menerbitkan surat. Silakan coba lagi."
+      );
     } finally {
       setProcessing(false);
     }
@@ -184,7 +305,6 @@ export default function PenerbitanSurat() {
       </main>
     );
   }
-  
 
   return (
     <main className="container max-w-full overflow-hidden" id="pengesahan">
