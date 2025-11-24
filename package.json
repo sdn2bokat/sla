@@ -11,19 +11,19 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@iconify/react": "^6.0.2",
-    "@sparticuz/chromium": "^141.0.0",
     "@supabase/supabase-js": "^2.84.0",
     "autoprefixer": "^10.4.19",
+    "cloudconvert": "^3.0.0",
     "clsx": "^2.1.1",
     "flowbite": "^3.1.2",
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.12.1",
     "jspdf": "^3.0.4",
     "next": "^16.0.1",
     "pdfjs-dist": "^5.4.394",
     "playwright-core": "^1.56.1",
     "postcss": "^8.4.31",
-    "puppeteer-core": "^24.31.0",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -36,7 +36,6 @@
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@types/react": "19.2.2",
-    "puppeteer": "^24.31.0",
     "typescript": "^5.4.5"
   }
 }
